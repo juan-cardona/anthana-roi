@@ -1,14 +1,14 @@
 "use client";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const sp = useSearchParams();
+  const sp = useSearchParams(); // <-- allowed because we're inside Suspense
 
   const onLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,3 +42,14 @@ export default function LoginPage() {
     </main>
   );
 }
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<main className="container py-16">Cargando…</main>}>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+// Avoid prerender issues on login
+export const dynamic = "force-dynamic";
