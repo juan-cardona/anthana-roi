@@ -25,11 +25,14 @@ export default async function ClientDetail({ params }: { params: { id: string } 
             <div key={p.id} className="card space-y-2">
               <div className="flex items-center justify-between">
                 <div className="font-semibold">{p.nombre} • {p.tipo_portafolio}</div>
-                <Link className="text-sm" href={`/app/portfolios/${p.id}/edit`}>Editar</Link>
+                <div className="flex items-center gap-3 text-sm">
+                  <Link className="hover:underline" href={`/app/portfolios/${p.id}/edit`}>Editar</Link>
+                  <a className="hover:underline" href="#tabla">Ver tabla</a>
+                </div>
               </div>
               <div className="text-sm text-gray-600">Capital final estimado: ${kpis.capital_final.toFixed(2)}</div>
               <div className="overflow-auto">
-                <table className="min-w-full text-sm">
+                <table id="tabla" className="min-w-full text-sm">
                   <thead>
                     <tr className="text-left">
                       <th className="p-2">Mes</th>

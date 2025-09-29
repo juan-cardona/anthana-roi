@@ -20,6 +20,7 @@ export default async function ClientsPage() {
           <Link key={c.id} href={`/app/clients/${c.id}`} className="card hover:shadow-md transition">
             <div className="text-lg font-semibold">{c.nombre}</div>
             <div className="text-sm text-gray-600">{c.email || "—"}</div>
+            <div className="mt-2 text-xs text-gray-500">Ver detalle →</div>
           </Link>
         ))}
         {(!clients || clients.length===0) && <div className="text-gray-600">No hay clientes aún.</div>}
