@@ -10,8 +10,8 @@ export function supabaseServer() {
       cookies: {
         async getAll() {
           // Return all cookies as an array of { name, value }
-          return Array.from(cookieStore.getAll()).map(([name, cookie]) => ({
-            name,
+          return cookieStore.getAll().map((cookie) => ({
+            name: cookie.name,
             value: cookie.value,
           }));
         },
