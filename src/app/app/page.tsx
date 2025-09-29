@@ -9,7 +9,7 @@ export default async function AppHome() {
   const { data: portfolios } = await supabase.from("portfolios").select("*").order("created_at", { ascending: false });
 
   const aggregates = (portfolios || []).reduce(
-    (acc: any, p: any) => {
+    (acc: { capitalInicial: number; rendNeto: number; capitalFinal: number; series: number[][] }, p: any) => {
       const { rows, kpis } = computeMonthly(p as any);
       acc.capitalInicial += kpis.capital_inicial_total || 0;
       acc.rendNeto += kpis.rend_neto || 0;
@@ -24,9 +24,9 @@ export default async function AppHome() {
 
   const mergedSpark = (() => {
     if (aggregates.series.length === 0) return [] as number[];
-    const maxLen = Math.max(...aggregates.series.map(s => s.length));
-    const padded = aggregates.series.map(s => Array.from({ length: maxLen }, (_, i) => s[s.length - maxLen + i] ?? s[0] ?? 0));
-    return padded[0].map((_, i) => padded.reduce((sum, s) => sum + (s[i] || 0), 0));
+    const maxLen = Math.max(...aggregates.series.map((s: number[]) => s.length));
+    const padded = aggregates.series.map((s: number[]) => Array.from({ length: maxLen }, (_, i: number) => s[s.length - maxLen + i] ?? s[0] ?? 0));
+    return padded[0].map((_, i: number) => padded.reduce((sum: number, s: number[]) => sum + (s[i] || 0), 0));
   })();
 
   function formatCurrency(n: number) {
