@@ -8,14 +8,18 @@ export function supabaseServer() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
+        async getAll() {
+          // Return all cookies as an array of { name, value }
+          return Array.from(cookieStore.getAll()).map(([name, cookie]) => ({
+            name,
+            value: cookie.value,
+          }));
         },
-        set(name: string, value: string, options: CookieOptions) {
-          cookieStore.set({ name, value, ...options });
-        },
-        remove(name: string, options: CookieOptions) {
-          cookieStore.set({ name, value: "", ...options, maxAge: 0 });
+        async setAll(cookies) {
+          // Set all cookies provided in the array
+          for (const { name, value, options } of cookies) {
+            cookieStore.set({ name, value, ...options });
+          }
         },
       },
     }
